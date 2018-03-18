@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>事件处理机制</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+	<style type="text/css">
+		#container{
+			padding:0;
+			margin:0;
+			background-color: #FFF;
+		}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+	<script type="text/babel">
+		var destination=document.getElementById("container");
+		//基础组件，当调用此基础组件时，将通过display将计数值传进来
+		var Counter=React.createClass({
+			render:function(){
+				var textStyle={
+					fontSize:72,
+					fontFamily:'sans-serif',
+					color:'#333',
+					fontWeight:'bold'
+				};
+
+				return (<div style={textStyle}>{this.props.display}</div>)
+			}
+		});
+		//外层组件，统计计数信息
+		var CounterParent=React.createClass({
+			getInitialState:function(){
+				return ({
+					count:0
+				});
+			},
+
+			//事件响应函数
+			increase:function(e){
+				//e syntheticevent
+				var currentCount=this.state.count;
+				if(e.shiftKey==true){
+					currentCount+=10;
+				}
+				else{
+					currentCount+=1;
+				}
+				this.setState({
+					count:currentCount
+				});
+			},
+
+			//设置背景属性
+			render:function(){
+				var backgroundStyle={
+					padding:50,
+					backgroundColor:'red',
+					width:230,
+					height:100,
+					borderRadius:10,
+					textAlign:'center'
+				};
+
+				var buttonStyle={
+					fontSize:'1em',
+					width:30,
+					height:30,
+					fontFamily:"sans-serif",
+					color:'#333',
+					fontWeight:'bold',
+					lineWeight:'3px'
+				};
+
+				return (
+					<div style={backgroundStyle}>
+						<Counter display={this.state.count} />
+						<button style={buttonStyle} onClick={this.increase}>+</button>
+					</div>);
+			}
+		});
+		ReactDOM.render(<div><CounterParent /></div>,destination);
+	</script>
+</body>
+</html>
